@@ -7,14 +7,18 @@
       @create="createPost"
       @remove="removePost"
     />
+    <specifications-list-from
+      @createList="createList"
+    />
   </div>
 </template>
 
 <script>
 import SpecificationsList from './SpecificationsList'
+import SpecificationsListFrom from './SpecificationsListForm.vue'
 export default {
   name: 'SpecificationsLists',
-  components: { SpecificationsList },
+  components: { SpecificationsList, SpecificationsListFrom },
   props: {
     lists: {
       type: Array
@@ -26,6 +30,9 @@ export default {
     },
     removePost (listId, post) {
       this.$emit('remove', listId, post)
+    },
+    createList (list) {
+      this.$emit('createList', list)
     }
   }
 }

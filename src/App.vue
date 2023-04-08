@@ -4,6 +4,7 @@
       :lists="lists"
       @create="createPost"
       @remove="removePost"
+      @createList="createList"
     />
   </div>
 </template>
@@ -37,6 +38,9 @@ export default {
           list.specifications = list.specifications.filter(p => p.id !== post.id)
         }
       })
+    },
+    createList (list) {
+      this.lists.push(list)
     }
   }
 }
