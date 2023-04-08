@@ -1,22 +1,35 @@
 <template>
   <h3>{{list.listName}}</h3>
-  <post-list
-    :posts="list.specifications"
-  />
-  <post-form
+    <specification-item
+      v-for="post in list.specifications"
+      :key="post.id"
+      :propPost="post"
+      :listId="list.id"
+      @remove="removePost"
+    />
+  <specification-form
+    :listId="list.id"
     @create="createPost"
   />
 </template>
 
 <script>
-import PostList from './PostList'
-import PostForm from './PostForm'
+import SpecificationForm from './SpecificationForm'
+import SpecificationItem from './SpecificationItem'
 export default {
   name: 'SpecificationsList',
-  components: { PostForm, PostList },
+  components: { SpecificationForm, SpecificationItem },
   props: {
     list: {
       type: Object
+    }
+  },
+  methods: {
+    createPost (listId, post) {
+      this.$emit('create', listId, post)
+    },
+    removePost (listId, post) {
+      this.$emit('remove', listId, post)
     }
   }
 }

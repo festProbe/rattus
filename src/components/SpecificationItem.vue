@@ -5,7 +5,7 @@
     </div>
     <div class="buttons">
       <button class="btn"><span>Изменить</span></button>
-      <button class="btn" @click="$emit('remove', post)"><span>Удалить</span></button>
+      <button class="btn" @click="$emit('remove', listId, post)"><span>Удалить</span></button>
     </div>
   </div>
 </template>
@@ -17,6 +17,9 @@ export default {
     propPost: {
       type: Object,
       required: true
+    },
+    listId: {
+      type: String
     }
   },
   data () {

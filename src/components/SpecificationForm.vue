@@ -9,6 +9,11 @@
 <script>
 export default {
   name: 'PostForm.vue',
+  props: {
+    listId: {
+      type: String
+    }
+  },
   data () {
     return {
       post: {
@@ -21,7 +26,7 @@ export default {
   methods: {
     createPost () {
       this.post.id = Date.now()
-      this.$emit('create', this.post)
+      this.$emit('create', this.listId, this.post)
       this.post = {
         specification: '',
         isDone: false,

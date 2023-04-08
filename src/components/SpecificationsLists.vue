@@ -4,6 +4,8 @@
       v-for="list in lists"
       :key="list.id"
       :list="list"
+      @create="createPost"
+      @remove="removePost"
     />
   </div>
 </template>
@@ -16,6 +18,14 @@ export default {
   props: {
     lists: {
       type: Array
+    }
+  },
+  methods: {
+    createPost (listId, post) {
+      this.$emit('create', listId, post)
+    },
+    removePost (listId, post) {
+      this.$emit('remove', listId, post)
     }
   }
 }
