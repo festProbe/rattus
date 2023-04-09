@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <div class="specification">
-      <div>{{ post.specification }}</div>
+      {{ post.specification }}
     </div>
     <div class="buttons">
       <button class="btn" @click="$emit('edit', listId, post)"><font-awesome-icon class="icon" icon="fa-regular fa-pen-to-square" /></button>
@@ -32,16 +32,18 @@ export default {
 
 <style scoped>
 .post {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.icon:hover {
-  color: #fff;
+  display: grid;
+  grid-template-columns: 80% 20%;
 }
 .specification {
+  width: 50%;
 }
 .buttons {
+  margin-left: auto;
   display: flex;
+  gap: 7px;
 }
+  .icon:hover {
+    color: #fff;
+  }
 </style>

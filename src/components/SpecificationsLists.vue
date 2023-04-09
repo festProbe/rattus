@@ -40,8 +40,9 @@ export default {
 
 <style scoped>
   .specifications-lists {
-    margin-top: 15px;
-    padding: 15px;
+    margin-top: 20px;
+    display: flex;
     flex-direction: column;
+    gap: 15px;
   }
 </style>

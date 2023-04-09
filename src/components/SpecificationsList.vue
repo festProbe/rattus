@@ -39,7 +39,6 @@ export default {
 
 <style scoped>
   .specification-list {
-    margin-top: 10px;
     padding: 15px;
     border: 2px solid teal;
     display: flex;
