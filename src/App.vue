@@ -2,8 +2,9 @@
   <div class="wrapper">
     <specifications-lists
       :lists="lists"
-      @create="createPost"
-      @remove="removePost"
+      @create="createSpecification"
+      @editSpecification="editSpecification"
+      @remove="removeSpecification"
       @createList="createList"
     />
   </div>
@@ -20,22 +21,33 @@ export default {
       lists: [{
         id: Date.now().toString(),
         listName: 'Требования для очень продуктивной компании',
-        specifications: [{ id: 1, specification: 'Возможность добавлять галочку' }]
+        specifications: [{ id: 1, text: 'Возможность добавлять галочку' }]
       }]
     }
   },
   methods: {
-    createPost (listId, post) {
+    createSpecification (listId, specification) {
       this.lists.forEach((list) => {
         if (list.id === listId) {
-          list.specifications.push(post)
+          list.specifications.push(specification)
         }
       })
     },
-    removePost (listId, post) {
+    editSpecification (listId, specification) {
       this.lists.forEach((list) => {
         if (list.id === listId) {
-          list.specifications = list.specifications.filter(p => p.id !== post.id)
+          list.specifications.forEach((specif) => {
+            if (specif.id !== specification.id) {
+              specif.text = specification.text
+            }
+          })
+        }
+      })
+    },
+    removeSpecification (listId, specification) {
+      this.lists.forEach((list) => {
+        if (list.id === listId) {
+          list.specifications = list.specifications.filter(p => p.id !== specification.id)
         }
       })
     },

@@ -4,8 +4,9 @@
       v-for="list in lists"
       :key="list.id"
       :list="list"
-      @create="createPost"
-      @remove="removePost"
+      @create="createSpecification"
+      @editSpecification='editSpecification'
+      @remove="removeSpecification"
     />
     <specifications-list-from
       @createList="createList"
@@ -25,14 +26,17 @@ export default {
     }
   },
   methods: {
-    createPost (listId, post) {
-      this.$emit('create', listId, post)
+    createSpecification (listId, specification) {
+      this.$emit('create', listId, specification)
     },
-    removePost (listId, post) {
-      this.$emit('remove', listId, post)
+    removeSpecification (listId, specification) {
+      this.$emit('remove', listId, specification)
     },
     createList (list) {
       this.$emit('createList', list)
+    },
+    editSpecification (listId, specification) {
+      this.$emit('editSpecification', listId, specification)
     }
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <form class="input" @submit.prevent>
-    <div><input class="text-box" v-model="post.specification" type="text" placeholder="specification">
-    <button class="btn" @click="createPost"><span>Добавить</span></button>
+    <div><input class="text-box" v-model="specification.text" type="text" placeholder="specification">
+    <button class="btn" @click="createSpecification"><span>Добавить</span></button>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  name: 'PostForm.vue',
+  name: 'SpecificationForm.vue',
   props: {
     listId: {
       type: String
@@ -16,21 +16,17 @@ export default {
   },
   data () {
     return {
-      post: {
-        specification: '',
-        isDone: false,
-        comment: ''
+      specification: {
+        text: ''
       }
     }
   },
   methods: {
-    createPost () {
-      this.post.id = Date.now()
-      this.$emit('create', this.listId, this.post)
-      this.post = {
-        specification: '',
-        isDone: false,
-        comment: ''
+    createSpecification () {
+      this.specification.id = Date.now()
+      this.$emit('create', this.listId, this.specification)
+      this.specification = {
+        text: ''
       }
     }
   }

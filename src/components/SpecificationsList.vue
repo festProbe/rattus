@@ -2,15 +2,16 @@
 <div class="specification-list">
   <h3 class="list-title">{{list.listName}}</h3>
     <specification-item
-      v-for="post in list.specifications"
-      :key="post.id"
-      :propPost="post"
+      v-for="specification in list.specifications"
+      :key="specification.id"
+      :propSpecification="specification"
       :listId="list.id"
-      @remove="removePost"
+      @editSpecification="editSpecification"
+      @remove="removeSpecification"
     />
   <specification-form
     :listId="list.id"
-    @create="createPost"
+    @create="createSpecification"
   />
 </div>
 </template>
@@ -27,11 +28,14 @@ export default {
     }
   },
   methods: {
-    createPost (listId, post) {
-      this.$emit('create', listId, post)
+    createSpecification (listId, specification) {
+      this.$emit('create', listId, specification)
     },
-    removePost (listId, post) {
-      this.$emit('remove', listId, post)
+    removeSpecification (listId, specification) {
+      this.$emit('remove', listId, specification)
+    },
+    editSpecification (listId, specification) {
+      this.$emit('editSpecification', listId, specification)
     }
   }
 }
