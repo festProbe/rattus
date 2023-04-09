@@ -42,8 +42,6 @@ export default {
   .specifications-lists {
     margin-top: 15px;
     padding: 15px;
-    border: 2px solid teal;
-    display: flex;
     flex-direction: column;
   }
 </style>

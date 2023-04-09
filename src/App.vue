@@ -53,7 +53,7 @@ export default {
   box-sizing: border-box;
 
   font-family: sans-serif;
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .wrapper {

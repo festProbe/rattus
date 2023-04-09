@@ -1,8 +1,8 @@
 <template>
   <form class="input" @submit.prevent>
-    <div><strong>Specification:</strong> <input class="text-box" v-model="post.specification" type="text" placeholder="specification">
-    </div>
+    <div><input class="text-box" v-model="post.specification" type="text" placeholder="specification">
     <button class="btn" @click="createPost"><span>Добавить</span></button>
+    </div>
   </form>
 </template>
 
@@ -41,14 +41,11 @@ export default {
 .input {
   margin-top: 15px;
   padding: 15px;
-  border: 2px solid teal;
-  width: 100%;
 }
 .input > div {
 
 }
 .btn {
-  margin-top: 15px;
 }
 .text-box {
 }

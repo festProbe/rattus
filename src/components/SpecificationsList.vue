@@ -1,5 +1,6 @@
 <template>
-  <h3>{{list.listName}}</h3>
+<div class="specification-list">
+  <h3 class="list-title">{{list.listName}}</h3>
     <specification-item
       v-for="post in list.specifications"
       :key="post.id"
@@ -11,6 +12,7 @@
     :listId="list.id"
     @create="createPost"
   />
+</div>
 </template>
 
 <script>
@@ -36,5 +38,16 @@ export default {
 </script>
 
 <style scoped>
-
+  .specification-list {
+    margin-top: 10px;
+    padding: 15px;
+    border: 2px solid teal;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .list-title {
+    font-size: 16px;
+    align-self: center;
+  }
 </style>
