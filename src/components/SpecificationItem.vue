@@ -81,6 +81,9 @@ export default {
 .btn {
   align-self: center;
 }
+.icon {
+  color: teal;
+}
 .icon:hover {
   color: #fff;
 }

@@ -10,9 +10,13 @@
       @remove="removeSpecification"
     />
   <specification-form
+    class="specification-form"
     :listId="list.id"
+    @hideAddSpecification="hideAddSpecification"
     @create="createSpecification"
+    hidden
   />
+  <font-awesome-icon class="add-icon" :icon="['fas', 'plus']" @click="showAddSpecification"/>
 </div>
 </template>
 
@@ -36,6 +40,30 @@ export default {
     },
     editSpecification (listId, specification) {
       this.$emit('editSpecification', listId, specification)
+    },
+    showAddSpecification () {
+      const form = document.querySelector('.specification-form')
+      const addIcon = document.querySelector('.add-icon')
+      if (form.hasAttribute('hidden')) {
+        form.removeAttribute('hidden')
+        document.querySelector('.new-specification-text').focus()
+        addIcon.style.display = 'none'
+      }
+      document.addEventListener('keydown', this.handleHideAddSpecification)
+    },
+    hideAddSpecification () {
+      const form = document.querySelector('.specification-form')
+      const addIcon = document.querySelector('.add-icon')
+      if (!form.hasAttribute('hidden')) {
+        form.setAttribute('hidden', 'hidden')
+        addIcon.style.display = 'inline-block'
+      }
+      document.removeEventListener('keydown', this.handleHideAddSpecification)
+    },
+    handleHideAddSpecification (event) {
+      if (event.key === 'Enter' || event.key === 'Esc' || event.key === 'Escape') {
+        this.hideAddSpecification()
+      }
     }
   }
 }
@@ -52,5 +80,9 @@ export default {
   .list-title {
     font-size: 16px;
     align-self: center;
+  }
+  .add-icon {
+    border: 1px solid teal;
+    color: teal;
   }
 </style>
