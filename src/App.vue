@@ -37,7 +37,7 @@ export default {
       this.lists.forEach((list) => {
         if (list.id === listId) {
           list.specifications.forEach((specif) => {
-            if (specif.id !== specification.id) {
+            if (specif.id === specification.id) {
               specif.text = specification.text
             }
           })
@@ -71,5 +71,9 @@ export default {
 .wrapper {
   margin: 0 auto;
   width: 600px;
+}
+
+.hidden {
+  display: none;
 }
 </style>

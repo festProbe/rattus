@@ -1,7 +1,8 @@
 <template>
-  <form class="input" @submit.prevent>
-    <div><input class="new-specification-text" v-model="specification.text" type="text" placeholder="specification">
-    <button class="btn" @click="createSpecification"><span>Добавить</span></button>
+  <form @submit.prevent>
+    <div class="new-specification-form">
+      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.text" type="text" placeholder="specification">
+      <font-awesome-icon class="btn" @click="createSpecification" :icon="['fas', 'plus']" />
     </div>
   </form>
 </template>
@@ -31,10 +32,25 @@ export default {
         }
       }
       this.$emit('hideAddSpecification')
+    },
+    createSpecificationOnEnter (event) {
+      if (event.key === 'Enter') {
+        this.createSpecification()
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.new-specification-form {
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+.btn {
+  margin-left: auto;
+  padding: 1px;
+  border: 1px solid teal;
+  color: teal;
+}
 </style>

@@ -1,22 +1,27 @@
 <template>
 <div class="specification-list">
   <h3 class="list-title">{{list.listName}}</h3>
-    <specification-item
-      v-for="specification in list.specifications"
-      :key="specification.id"
-      :propSpecification="specification"
-      :listId="list.id"
-      @editSpecification="editSpecification"
-      @remove="removeSpecification"
-    />
+  <specification-item
+    v-for="specification in list.specifications"
+    :key="specification.id"
+    :propSpecification="specification"
+    :listId="list.id"
+    @editSpecification="editSpecification"
+    @remove="removeSpecification"
+  />
   <specification-form
     class="specification-form"
+    :class="{ hidden: isHidden }"
     :listId="list.id"
     @hideAddSpecification="hideAddSpecification"
     @create="createSpecification"
-    hidden
   />
-  <font-awesome-icon class="add-icon" :icon="['fas', 'plus']" @click="showAddSpecification"/>
+  <font-awesome-icon
+    class="add-icon"
+    :class="{ hidden: !isHidden }"
+    :icon="['fas', 'plus']"
+    @click="showAddSpecification"
+  />
 </div>
 </template>
 
@@ -31,6 +36,11 @@ export default {
       type: Object
     }
   },
+  data () {
+    return {
+      isHidden: true
+    }
+  },
   methods: {
     createSpecification (listId, specification) {
       this.$emit('create', listId, specification)
@@ -42,26 +52,15 @@ export default {
       this.$emit('editSpecification', listId, specification)
     },
     showAddSpecification () {
-      const form = document.querySelector('.specification-form')
-      const addIcon = document.querySelector('.add-icon')
-      if (form.hasAttribute('hidden')) {
-        form.removeAttribute('hidden')
-        document.querySelector('.new-specification-text').focus()
-        addIcon.style.display = 'none'
-      }
+      this.isHidden = !this.isHidden
       document.addEventListener('keydown', this.handleHideAddSpecification)
     },
     hideAddSpecification () {
-      const form = document.querySelector('.specification-form')
-      const addIcon = document.querySelector('.add-icon')
-      if (!form.hasAttribute('hidden')) {
-        form.setAttribute('hidden', 'hidden')
-        addIcon.style.display = 'inline-block'
-      }
+      this.isHidden = !this.isHidden
       document.removeEventListener('keydown', this.handleHideAddSpecification)
     },
     handleHideAddSpecification (event) {
-      if (event.key === 'Enter' || event.key === 'Esc' || event.key === 'Escape') {
+      if (event.key === 'Esc' || event.key === 'Escape') {
         this.hideAddSpecification()
       }
     }
