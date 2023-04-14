@@ -1,30 +1,33 @@
 <template>
   <div class="specifications-lists">
     <specifications-lists-control-panel
+      class="controls"
       v-if="needShowControlPanel"
       :needShowChangeName="needShowChangeName"
     />
-    <specifications-list
-      v-for="list in lists"
-      :key="list.id"
-      :list="list"
-      @create="createSpecification"
-      @editSpecification='editSpecification'
-      @remove="removeSpecification"
-      @checkList="checkList"
-    />
-    <specifications-list-form
-      v-if="isShowSpecificationForm"
-      :needFocus="needFocus"
-      @createList="createList"
-      @hideAddListFrom="hideAddListFrom"
-    />
-    <font-awesome-icon
-      class="add-list-icon"
-      v-if="!isShowSpecificationForm"
-      :icon="['fas', 'plus']"
-      @click="showCreateListForm"
-    />
+    <div class="specifications-main">
+      <specifications-list
+        v-for="list in lists"
+        :key="list.id"
+        :list="list"
+        @create="createSpecification"
+        @editSpecification='editSpecification'
+        @remove="removeSpecification"
+        @checkList="checkList"
+      />
+      <specifications-list-form
+        v-if="isShowSpecificationForm"
+        :needFocus="needFocus"
+        @createList="createList"
+        @hideAddListFrom="hideAddListFrom"
+      />
+      <font-awesome-icon
+        class="add-list-icon"
+        v-if="!isShowSpecificationForm"
+        :icon="['fas', 'plus']"
+        @click="showCreateListForm"
+      />
+    </div>
   </div>
 </template>
 
@@ -91,15 +94,25 @@ export default {
 </script>
 
 <style scoped>
-  .specifications-lists {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .add-list-icon {
-    height: 25px;
-    color: teal;
-    border: 2px solid teal;
-  }
+.specifications-lists {
+  margin: 0 auto;
+  width: 600px;
+}
+.specifications-main {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.controls {
+  position: fixed;
+  top: 0;
+  height: 20px;
+  min-width: 600px;
+}
+.add-list-icon {
+  height: 25px;
+  color: teal;
+  border: 2px solid teal;
+}
 </style>

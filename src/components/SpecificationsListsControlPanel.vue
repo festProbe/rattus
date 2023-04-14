@@ -1,8 +1,8 @@
 <template>
   <div class="controls">
-    <button>Оценка текущих требований</button>
-    <button v-if="needShowChangeName">Изменить название</button>
-    <button>Удалить</button>
+    <button class="control-btn">Оценка текущих требований</button>
+    <button class="control-btn" v-if="needShowChangeName">Изменить название</button>
+    <button class="control-btn">Удалить</button>
   </div>
 </template>
 
@@ -20,5 +20,13 @@ export default {
 <style scoped>
 .controls {
   display: flex;
+  justify-content: space-between;
+}
+.control-btn {
+  border: 2px solid black;
+  border-radius: 7px;
+  flex: 1;
+  background-color: teal;
+  color: white;
 }
 </style>

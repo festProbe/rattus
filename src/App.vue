@@ -4,10 +4,15 @@
       <specifications-lists
         v-if="isEditPage"
         :lists="lists"
+        @click="fetchLists"
         @create="createSpecification"
         @editSpecification="editSpecification"
         @remove="removeSpecification"
         @createList="createList"
+      />
+      <evaluation-table
+        v-if="isEvaluationPage"
+        :lists="lists"
       />
     </div>
     <div class="footer">
@@ -18,9 +23,12 @@
 </template>
 
 <script>
+import axios from 'axios'
 import SpecificationsLists from './components/SpecificationsLists'
+import EvaluationTable from './components/EvaluationTable'
 export default {
   components: {
+    EvaluationTable,
     SpecificationsLists
   },
   data () {
@@ -28,7 +36,7 @@ export default {
       lists: [{
         id: Date.now().toString(),
         listName: 'Требования для очень продуктивной компании',
-        specifications: [{ id: 1, text: 'Возможность добавлять галочку' }]
+        specifications: []
       }],
       isEditPage: true,
       isEvaluationPage: false
@@ -70,6 +78,20 @@ export default {
     chooseEvaluationPage () {
       this.isEvaluationPage = true
       this.isEditPage = false
+    },
+    async fetchLists () {
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        this.lists[0].specifications = response.data.map(post => {
+          return {
+            ...post,
+            text: post.body
+          }
+        })
+        console.log(response)
+      } catch (e) {
+        alert('ошибка')
+      }
     }
   }
 }
@@ -87,7 +109,6 @@ export default {
 
 .wrapper {
   margin: 0 auto;
-  width: 600px;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -100,15 +121,15 @@ export default {
 
 .footer {
   position: fixed;
-  margin-top: auto;
+  margin: auto auto 0 auto;
   bottom: 0;
-  min-width: 600px;
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 
 .footer-page {
-  width: 50%;
+  min-width: 50%;
   min-height: 30px;
   text-align: center;
   border: 2px solid black;
