@@ -1,13 +1,13 @@
 <template>
   <div class="post">
     <div
-      :class="{ hidden: isHidden }"
+      v-if="!isShowEditInput"
       class="specification"
     >
       {{ specification.text }}
     </div>
     <input
-      :class="{ hidden: !isHidden }"
+      v-if="isShowEditInput"
       @keydown="handleChangeElementOnKey"
       class="new-specification"
       v-model="updatedSpecification"
@@ -52,13 +52,13 @@ export default {
     return {
       specification: this.propSpecification,
       updatedSpecification: '',
-      isHidden: false
+      isShowEditInput: false
     }
   },
   methods: {
     editSpecification () {
       this.updatedSpecification = this.specification.text
-      this.isHidden = !this.isHidden
+      this.isShowEditInput = !this.isShowEditInput
     },
     handleChangeElementOnKey (event) {
       if (event.key === 'Enter' || event.key === 'Esc' || event.key === 'Escape') {
@@ -66,7 +66,7 @@ export default {
       }
     },
     handleChangeElement () {
-      this.isHidden = !this.isHidden
+      this.isShowEditInput = !this.isShowEditInput
       if (this.updatedSpecification !== this.specification.text) {
         this.$emit('editSpecification', this.listId, {
           ...this.specification,

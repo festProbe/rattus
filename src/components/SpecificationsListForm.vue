@@ -2,7 +2,7 @@
   <form @submit.prevent>
     <div>
       <span>Введите название списка</span>
-      <input v-model="listName" type="text"/>
+      <input ref="refListName" v-model="listName" type="text"/>
       <button @click="createList">Добавить</button>
     </div>
   </form>
@@ -10,6 +10,11 @@
 
 <script>
 export default {
+  props: {
+    needFocus: {
+      type: Boolean
+    }
+  },
   data () {
     return {
       listName: ''
@@ -17,6 +22,10 @@ export default {
   },
   methods: {
     createList () {
+      if (!this.listName) {
+        this.$emit('hideAddListFrom')
+        return
+      }
       const list = {
         id: Date.now().toString(),
         listName: this.listName,
@@ -24,6 +33,11 @@ export default {
       }
       this.$emit('createList', list)
       this.listName = ''
+    },
+    focusInput () {
+      if (this.needFocus) {
+        this.$refs.refListName.focus()
+      }
     }
   }
 }

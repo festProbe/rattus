@@ -1,6 +1,8 @@
 <template>
-<div class="specification-list">
-  <h3 class="list-title">{{list.listName}}</h3>
+<div
+  class="specification-list"
+>
+  <h3 class="list-title">{{list.listName}} <input class="check-list" type="checkbox" @click="checkList"></h3>
   <specification-item
     v-for="specification in list.specifications"
     :key="specification.id"
@@ -11,14 +13,15 @@
   />
   <specification-form
     class="specification-form"
-    :class="{ hidden: isHidden }"
+    v-if="isShowSpecificationForm"
     :listId="list.id"
+    :needFocus="needFocus"
     @hideAddSpecification="hideAddSpecification"
     @create="createSpecification"
   />
   <font-awesome-icon
     class="add-icon"
-    :class="{ hidden: !isHidden }"
+    v-if="!isShowSpecificationForm"
     :icon="['fas', 'plus']"
     @click="showAddSpecification"
   />
@@ -38,7 +41,8 @@ export default {
   },
   data () {
     return {
-      isHidden: true
+      isShowSpecificationForm: false,
+      needFocus: false
     }
   },
   methods: {
@@ -52,17 +56,20 @@ export default {
       this.$emit('editSpecification', listId, specification)
     },
     showAddSpecification () {
-      this.isHidden = !this.isHidden
+      this.isShowSpecificationForm = !this.isShowSpecificationForm
       document.addEventListener('keydown', this.handleHideAddSpecification)
     },
     hideAddSpecification () {
-      this.isHidden = !this.isHidden
+      this.isShowSpecificationForm = !this.isShowSpecificationForm
       document.removeEventListener('keydown', this.handleHideAddSpecification)
     },
     handleHideAddSpecification (event) {
       if (event.key === 'Esc' || event.key === 'Escape') {
         this.hideAddSpecification()
       }
+    },
+    checkList () {
+      this.$emit('checkList', this.list.id)
     }
   }
 }
@@ -75,6 +82,9 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+  .check-list {
+    margin-left: auto;
   }
   .list-title {
     font-size: 16px;
