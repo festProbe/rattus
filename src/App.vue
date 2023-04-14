@@ -4,7 +4,6 @@
       <specifications-lists
         v-if="isEditPage"
         :lists="lists"
-        @click="fetchLists"
         @create="createSpecification"
         @editSpecification="editSpecification"
         @remove="removeSpecification"
@@ -15,7 +14,7 @@
         :lists="lists"
       />
     </div>
-    <div class="footer">
+    <div class="footer noprint">
       <div class="footer-page" @click="chooseEditPage">Редактирование</div>
       <div class="footer-page" @click="chooseEvaluationPage">Оценка требований</div>
     </div>
@@ -93,6 +92,9 @@ export default {
         alert('ошибка')
       }
     }
+  },
+  mounted () {
+    this.fetchLists()
   }
 }
 </script>
@@ -139,5 +141,10 @@ export default {
   color: white;
   font-weight: bold;
   cursor: pointer;
+}
+@media print {
+  .noprint {
+    display: none !important;
+  }
 }
 </style>

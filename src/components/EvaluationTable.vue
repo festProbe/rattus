@@ -75,7 +75,7 @@ select {
   min-height: 20px;
   display: grid;
   line-height: 1.5em;
-  padding: 0.25em 0.5em 0.25em 0.5em;
+  padding: 0.25em 0.25em 0.25em 0.25em;
   margin: 0;
   border-radius: 4px;
 }
