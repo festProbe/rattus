@@ -4,8 +4,8 @@
       <router-view></router-view>
     </div>
     <div class="footer noprint">
-      <div class="footer-page">Редактирование</div>
-      <div class="footer-page">Оценка требований</div>
+      <router-link class="footer-page" to="/">Редактирование</router-link>
+      <router-link class="footer-page" to="/evaluation">Оценка требований</router-link>
     </div>
   </div>
 </template>
