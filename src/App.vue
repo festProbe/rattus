@@ -1,44 +1,25 @@
 <template>
   <div class="wrapper">
     <div class="main">
-      <specifications-lists
-        v-if="isEditPage"
-        :lists="lists"
-        @create="createSpecification"
-        @editSpecification="editSpecification"
-        @remove="removeSpecification"
-        @createList="createList"
-      />
-      <evaluation-table
-        v-if="isEvaluationPage"
-        :lists="lists"
-      />
+      <router-view></router-view>
     </div>
     <div class="footer noprint">
-      <div class="footer-page" @click="chooseEditPage">Редактирование</div>
-      <div class="footer-page" @click="chooseEvaluationPage">Оценка требований</div>
+      <div class="footer-page">Редактирование</div>
+      <div class="footer-page">Оценка требований</div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import SpecificationsLists from './components/SpecificationsLists'
-import EvaluationTable from './components/EvaluationTable'
 export default {
-  components: {
-    EvaluationTable,
-    SpecificationsLists
-  },
   data () {
     return {
       lists: [{
         id: Date.now().toString(),
         listName: 'Требования для очень продуктивной компании',
         specifications: []
-      }],
-      isEditPage: true,
-      isEvaluationPage: false
+      }]
     }
   },
   methods: {
@@ -70,17 +51,9 @@ export default {
     createList (list) {
       this.lists.push(list)
     },
-    chooseEditPage () {
-      this.isEditPage = true
-      this.isEvaluationPage = false
-    },
-    chooseEvaluationPage () {
-      this.isEvaluationPage = true
-      this.isEditPage = false
-    },
     async fetchLists () {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=3')
         this.lists[0].specifications = response.data.map(post => {
           return {
             ...post,

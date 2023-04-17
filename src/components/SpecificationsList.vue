@@ -3,14 +3,16 @@
   class="specification-list"
 >
   <h3 class="list-title">{{list.listName}} <input class="check-list" type="checkbox" @click="checkList"></h3>
-  <specification-item
-    v-for="specification in list.specifications"
-    :key="specification.id"
-    :propSpecification="specification"
-    :listId="list.id"
-    @editSpecification="editSpecification"
-    @remove="removeSpecification"
-  />
+  <transition-group name="specifications">
+    <specification-item
+      v-for="specification in list.specifications"
+      :key="specification.id"
+      :propSpecification="specification"
+      :listId="list.id"
+      @editSpecification="editSpecification"
+      @remove="removeSpecification"
+    />
+  </transition-group>
   <specification-form
     class="specification-form"
     v-if="isShowSpecificationForm"
@@ -93,5 +95,18 @@ export default {
   .add-icon {
     border: 1px solid teal;
     color: teal;
+  }
+  .specifications-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .specifications-enter-active,
+  .specifications-leave-active {
+    transition: all 0.4s ease;
+  }
+  .specifications-enter-from,
+  .specifications-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
   }
 </style>

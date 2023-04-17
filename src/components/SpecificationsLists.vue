@@ -6,15 +6,17 @@
       :needShowChangeName="needShowChangeName"
     />
     <div class="specifications-main">
-      <specifications-list
-        v-for="list in lists"
-        :key="list.id"
-        :list="list"
-        @create="createSpecification"
-        @editSpecification='editSpecification'
-        @remove="removeSpecification"
-        @checkList="checkList"
-      />
+      <transition-group name="lists">
+        <specifications-list
+          v-for="list in lists"
+          :key="list.id"
+          :list="list"
+          @create="createSpecification"
+          @editSpecification='editSpecification'
+          @remove="removeSpecification"
+          @checkList="checkList"
+        />
+      </transition-group>
       <specifications-list-form
         v-if="isShowSpecificationForm"
         :needFocus="needFocus"
@@ -114,5 +116,18 @@ export default {
   height: 25px;
   color: teal;
   border: 2px solid teal;
+}
+.lists-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.lists-enter-active,
+.lists-leave-active {
+  transition: all 0.4s ease;
+}
+.lists-enter-from,
+.lists-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

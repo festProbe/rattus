@@ -19,7 +19,7 @@
             <option value="fail">Не выполнено</option>
           </select>
         </td>
-        <td><textarea></textarea></td>
+        <td><textarea v-model="comment" @input="resize($event)"></textarea></td>
       </tr>
     </table>
   </div>
@@ -31,6 +31,17 @@ export default {
   props: {
     lists: {
       type: Array
+    }
+  },
+  data () {
+    return {
+      comment: ''
+    }
+  },
+  methods: {
+    resize (e) {
+      e.target.style.height = 'auto'
+      e.target.style.height = `${this.scrollHeight}px`
     }
   }
 }
@@ -51,7 +62,7 @@ export default {
 }
 tr {
   display: grid;
-  grid-template-columns: 1fr 165px 1fr;
+  grid-template-columns: 1fr 170px 1fr;
   align-items: center;
   border: 1px solid black;
   border-top: none;
@@ -75,7 +86,7 @@ select {
   min-height: 20px;
   display: grid;
   line-height: 1.5em;
-  padding: 0.25em 0.25em 0.25em 0.25em;
+  padding: 0.25em 0.2em 0.25em 0.2em;
   margin: 0;
   border-radius: 4px;
 }
