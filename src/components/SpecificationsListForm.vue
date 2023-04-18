@@ -9,35 +9,24 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  props: {
-    needFocus: {
-      type: Boolean
-    }
-  },
   data () {
     return {
       listName: ''
     }
   },
   methods: {
+    ...mapActions({
+      fetchAndCreateNewList: 'specificationsLists/fetchAndCreateNewList'
+    }),
     createList () {
       if (!this.listName) {
-        this.$emit('hideAddListFrom')
+        this.fetchAndCreateNewList(this.listName)
         return
       }
-      const list = {
-        id: Date.now().toString(),
-        listName: this.listName,
-        specifications: []
-      }
-      this.$emit('createList', list)
       this.listName = ''
-    },
-    focusInput () {
-      if (this.needFocus) {
-        this.$refs.refListName.focus()
-      }
     }
   }
 }

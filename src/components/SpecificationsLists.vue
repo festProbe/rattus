@@ -37,18 +37,13 @@
 import SpecificationsList from './SpecificationsList'
 import SpecificationsListForm from './SpecificationsListForm.vue'
 import SpecificationsListsControlPanel from './SpecificationsListsControlPanel'
+import { mapState } from 'vuex'
 export default {
   name: 'SpecificationsLists',
   components: { SpecificationsListsControlPanel, SpecificationsList, SpecificationsListForm },
-  props: {
-    lists: {
-      type: Array
-    }
-  },
   data () {
     return {
       isShowSpecificationForm: false,
-      needFocus: false,
       needShowChangeName: false,
       checkedLists: [],
       needShowControlPanel: false
@@ -91,6 +86,11 @@ export default {
         this.needShowChangeName = false
       }
     }
+  },
+  computed: {
+    ...mapState({
+      lists: state => state.specificationsLists.lists
+    })
   }
 }
 </script>

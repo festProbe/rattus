@@ -11,60 +11,18 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  data () {
-    return {
-      lists: [{
-        id: Date.now().toString(),
-        listName: 'Требования для очень продуктивной компании',
-        specifications: []
-      }]
-    }
-  },
   methods: {
-    createSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications.push(specification)
-        }
-      })
-    },
-    editSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications.forEach((specif) => {
-            if (specif.id === specification.id) {
-              specif.text = specification.text
-            }
-          })
-        }
-      })
-    },
-    removeSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications = list.specifications.filter(p => p.id !== specification.id)
-        }
-      })
-    },
-    createList (list) {
-      this.lists.push(list)
-    },
-    async fetchLists () {
-      try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=3')
-        this.lists[0].specifications = response.data.map(post => {
-          return {
-            ...post,
-            text: post.body
-          }
-        })
-        console.log(response)
-      } catch (e) {
-        alert('ошибка')
-      }
-    }
+    ...mapActions({
+      fetchLists: 'specificationsLists/fetchLists'
+    })
+  },
+  computed: {
+    ...mapState({
+      lists: state => state.specificationsLists.lists
+    })
   },
   mounted () {
     this.fetchLists()
@@ -115,6 +73,7 @@ export default {
   font-weight: bold;
   cursor: pointer;
 }
+
 @media print {
   .noprint {
     display: none !important;

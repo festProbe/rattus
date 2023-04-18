@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'SpecificationForm.vue',
   props: {
@@ -23,9 +25,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      createSpecification: 'specificationsLists/createSpecification'
+    }),
     createSpecification () {
       if (this.specification.text) {
-        this.specification.id = Date.now()
         this.$emit('create', this.listId, this.specification)
         this.specification = {
           text: ''

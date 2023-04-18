@@ -1,6 +1,5 @@
 <template>
   <specifications-lists
-    :lists="lists"
     @create="createSpecification"
     @editSpecification="editSpecification"
     @remove="removeSpecification"
