@@ -2,18 +2,38 @@
 <div
   class="specification-list"
 >
-  <h3 class="list-title">{{list.listName}} <input class="check-list" type="checkbox" @click="checkList"></h3>
-  <specification-item
-    v-for="specification in list.specifications"
-    :key="specification.id"
-    :propSpecification="specification"
-    :listId="list.id"
-    @editSpecification="editSpecification"
-    @remove="removeSpecification"
-  />
+  <div class="list-title">
+    <div class="list-name">
+      <h3>{{list.name}}</h3>
+<!--      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.title" type="text" placeholder="specification">-->
+    </div>
+    <button
+      class="btn"
+      @click="showEditForm"
+    >
+      <font-awesome-icon
+        class="icon"
+        icon="fa-regular fa-pen-to-square"
+      />
+    </button>
+    <div class="check-list">
+      <input type="checkbox" @change="checkList">
+    </div>
+
+  </div>
+  <transition-group name="specifications">
+    <specification-item
+      v-for="specification in list.specifications"
+      :key="specification.id"
+      :propSpecification="specification"
+      :listId="list.id"
+      @editSpecification="editSpecification"
+      @remove="removeSpecification"
+    />
+  </transition-group>
   <specification-form
     class="specification-form"
-    v-if="isShowSpecificationForm"
+    v-if="this.isShowSpecificationForm"
     :listId="list.id"
     :needFocus="needFocus"
     @hideAddSpecification="hideAddSpecification"
@@ -21,7 +41,7 @@
   />
   <font-awesome-icon
     class="add-icon"
-    v-if="!isShowSpecificationForm"
+    v-if="!this.isShowSpecificationForm"
     :icon="['fas', 'plus']"
     @click="showAddSpecification"
   />
@@ -31,6 +51,7 @@
 <script>
 import SpecificationForm from './SpecificationForm'
 import SpecificationItem from './SpecificationItem'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'SpecificationsList',
   components: { SpecificationForm, SpecificationItem },
@@ -46,6 +67,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      pushToCheckedLists: 'specificationsLists/pushToCheckedLists',
+      removeFromCheckedLists: 'specificationsLists/removeFromCheckedLists'
+    }),
     createSpecification (listId, specification) {
       this.$emit('create', listId, specification)
     },
@@ -68,7 +93,13 @@ export default {
         this.hideAddSpecification()
       }
     },
-    checkList () {
+    checkList (e) {
+      console.log(e)
+      if (e.target.checked) {
+        this.pushToCheckedLists(this.list.id)
+      } else {
+        this.removeFromCheckedLists(this.list.id)
+      }
       this.$emit('checkList', this.list.id)
     }
   }
@@ -83,15 +114,33 @@ export default {
     flex-direction: column;
     gap: 10px;
   }
-  .check-list {
-    margin-left: auto;
-  }
   .list-title {
     font-size: 16px;
+    display: flex;
+    gap: 5px;
+  }
+  .list-title > h3 {
     align-self: center;
+    justify-self: center;
+  }
+  .check-list {
+    margin-left: auto;
   }
   .add-icon {
     border: 1px solid teal;
     color: teal;
+  }
+  .specifications-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .specifications-enter-active,
+  .specifications-leave-active {
+    transition: all 0.4s ease;
+  }
+  .specifications-enter-from,
+  .specifications-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
   }
 </style>

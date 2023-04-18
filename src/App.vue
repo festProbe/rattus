@@ -1,97 +1,28 @@
 <template>
   <div class="wrapper">
     <div class="main">
-      <specifications-lists
-        v-if="isEditPage"
-        :lists="lists"
-        @create="createSpecification"
-        @editSpecification="editSpecification"
-        @remove="removeSpecification"
-        @createList="createList"
-      />
-      <evaluation-table
-        v-if="isEvaluationPage"
-        :lists="lists"
-      />
+      <router-view></router-view>
     </div>
     <div class="footer noprint">
-      <div class="footer-page" @click="chooseEditPage">Редактирование</div>
-      <div class="footer-page" @click="chooseEvaluationPage">Оценка требований</div>
+      <router-link class="footer-page" to="/">Редактирование</router-link>
+      <router-link class="footer-page" to="/evaluation">Оценка требований</router-link>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import SpecificationsLists from './components/SpecificationsLists'
-import EvaluationTable from './components/EvaluationTable'
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  components: {
-    EvaluationTable,
-    SpecificationsLists
-  },
-  data () {
-    return {
-      lists: [{
-        id: Date.now().toString(),
-        listName: 'Требования для очень продуктивной компании',
-        specifications: []
-      }],
-      isEditPage: true,
-      isEvaluationPage: false
-    }
-  },
   methods: {
-    createSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications.push(specification)
-        }
-      })
-    },
-    editSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications.forEach((specif) => {
-            if (specif.id === specification.id) {
-              specif.text = specification.text
-            }
-          })
-        }
-      })
-    },
-    removeSpecification (listId, specification) {
-      this.lists.forEach((list) => {
-        if (list.id === listId) {
-          list.specifications = list.specifications.filter(p => p.id !== specification.id)
-        }
-      })
-    },
-    createList (list) {
-      this.lists.push(list)
-    },
-    chooseEditPage () {
-      this.isEditPage = true
-      this.isEvaluationPage = false
-    },
-    chooseEvaluationPage () {
-      this.isEvaluationPage = true
-      this.isEditPage = false
-    },
-    async fetchLists () {
-      try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
-        this.lists[0].specifications = response.data.map(post => {
-          return {
-            ...post,
-            text: post.body
-          }
-        })
-        console.log(response)
-      } catch (e) {
-        alert('ошибка')
-      }
-    }
+    ...mapActions({
+      fetchLists: 'specificationsLists/fetchLists'
+    })
+  },
+  computed: {
+    ...mapState({
+      lists: state => state.specificationsLists.lists
+    })
   },
   mounted () {
     this.fetchLists()
@@ -142,6 +73,7 @@ export default {
   font-weight: bold;
   cursor: pointer;
 }
+
 @media print {
   .noprint {
     display: none !important;

@@ -1,13 +1,15 @@
 <template>
   <form @submit.prevent>
     <div class="new-specification-form">
-      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.text" type="text" placeholder="specification">
+      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.title" type="text" placeholder="specification">
       <font-awesome-icon class="btn" @click="createSpecification" :icon="['fas', 'plus']" />
     </div>
   </form>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'SpecificationForm.vue',
   props: {
@@ -18,15 +20,22 @@ export default {
   data () {
     return {
       specification: {
-        text: ''
+        title: '',
+        done: false,
+        comment: ''
       }
     }
   },
   methods: {
+    ...mapActions({
+      addNewSpecification: 'specificationsLists/addNewSpecification'
+    }),
     createSpecification () {
-      if (this.specification.text) {
-        this.specification.id = Date.now()
-        this.$emit('create', this.listId, this.specification)
+      if (this.specification.title) {
+        this.addNewSpecification({
+          listId: this.listId,
+          specification: this.specification
+        })
         this.specification = {
           text: ''
         }

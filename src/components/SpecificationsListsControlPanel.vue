@@ -2,17 +2,24 @@
   <div class="controls">
     <button class="control-btn">Оценка текущих требований</button>
     <button class="control-btn" v-if="needShowChangeName">Изменить название</button>
-    <button class="control-btn">Удалить</button>
+    <button class="control-btn" @click="removeLists">Удалить</button>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'SpecificationsListsControlPanel',
-  props: {
-    needShowChangeName: {
-      type: Boolean
-    }
+  methods: {
+    ...mapActions({
+      removeLists: 'specificationsLists/removeLists'
+    })
+  },
+  computed: {
+    ...mapState({
+      needShowChangeName: state => state.specificationsLists.needShowChangeName
+    })
   }
 }
 </script>

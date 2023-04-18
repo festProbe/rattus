@@ -4,10 +4,10 @@
       v-if="!isShowEditInput"
       class="specification"
     >
-      {{ specification.text }}
+      {{ specification.title }}
     </div>
     <input
-      v-if="isShowEditInput"
+      v-else
       @keydown="handleChangeElementOnKey"
       class="new-specification"
       v-model="updatedSpecification"
@@ -16,7 +16,7 @@
     <div class="buttons">
       <button
         class="btn"
-        @click="editSpecification"
+        @click="showEditForm"
       >
         <font-awesome-icon
           class="icon"
@@ -25,7 +25,7 @@
       </button>
       <button
         class="btn"
-        @click="$emit('remove', listId, specification)"
+        @click="removeSpecification"
       >
         <font-awesome-icon
           class="icon"
@@ -37,15 +37,16 @@
 </template>
 
 <script>
+import { Specification } from '@/interfaces/specificationsListsModules'
+import { mapActions } from 'vuex'
 export default {
   name: 'SpecificationItem',
   props: {
     propSpecification: {
-      type: Object,
-      required: true
+      type: Specification
     },
     listId: {
-      type: String
+      type: Number
     }
   },
   data () {
@@ -56,8 +57,12 @@ export default {
     }
   },
   methods: {
-    editSpecification () {
-      this.updatedSpecification = this.specification.text
+    ...mapActions({
+      editSpecification: 'specificationsLists/editSpecification',
+      deleteSpecification: 'specificationsLists/deleteSpecification'
+    }),
+    showEditForm () {
+      this.updatedSpecification = this.specification.title
       this.isShowEditInput = !this.isShowEditInput
     },
     handleChangeElementOnKey (event) {
@@ -67,12 +72,19 @@ export default {
     },
     handleChangeElement () {
       this.isShowEditInput = !this.isShowEditInput
-      if (this.updatedSpecification !== this.specification.text) {
-        this.$emit('editSpecification', this.listId, {
-          ...this.specification,
-          text: this.updatedSpecification
+      if (this.updatedSpecification && this.updatedSpecification !== this.specification.title) {
+        this.editSpecification({
+          listId: this.listId,
+          specification: {
+            ...this.specification,
+            title: this.updatedSpecification
+          }
         })
       }
+      this.isShowEditInput = !this.isShowEditInput
+    },
+    removeSpecification () {
+      this.deleteSpecification({ listId: this.listId, specificationId: this.specification.id })
     }
   }
 }

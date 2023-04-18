@@ -6,19 +6,17 @@
       :needShowChangeName="needShowChangeName"
     />
     <div class="specifications-main">
-      <specifications-list
-        v-for="list in lists"
-        :key="list.id"
-        :list="list"
-        @create="createSpecification"
-        @editSpecification='editSpecification'
-        @remove="removeSpecification"
-        @checkList="checkList"
-      />
+      <transition-group name="lists">
+        <specifications-list
+          v-for="list in lists"
+          :key="list.id"
+          :list="list"
+          @checkList="checkList"
+        />
+      </transition-group>
       <specifications-list-form
         v-if="isShowSpecificationForm"
         :needFocus="needFocus"
-        @createList="createList"
         @hideAddListFrom="hideAddListFrom"
       />
       <font-awesome-icon
@@ -35,60 +33,31 @@
 import SpecificationsList from './SpecificationsList'
 import SpecificationsListForm from './SpecificationsListForm.vue'
 import SpecificationsListsControlPanel from './SpecificationsListsControlPanel'
+import { mapState } from 'vuex'
 export default {
   name: 'SpecificationsLists',
   components: { SpecificationsListsControlPanel, SpecificationsList, SpecificationsListForm },
-  props: {
-    lists: {
-      type: Array
-    }
-  },
   data () {
     return {
       isShowSpecificationForm: false,
-      needFocus: false,
-      needShowChangeName: false,
-      checkedLists: [],
-      needShowControlPanel: false
+
+      checkedLists: []
     }
   },
   methods: {
-    createSpecification (listId, specification) {
-      this.$emit('create', listId, specification)
-    },
-    removeSpecification (listId, specification) {
-      this.$emit('remove', listId, specification)
-    },
-    createList (list) {
-      this.isShowSpecificationForm = !this.isShowSpecificationForm
-      this.$emit('createList', list)
-    },
-    editSpecification (listId, specification) {
-      this.$emit('editSpecification', listId, specification)
-    },
     showCreateListForm () {
       this.isShowSpecificationForm = !this.isShowSpecificationForm
     },
     hideAddListFrom () {
       this.isShowSpecificationForm = !this.isShowSpecificationForm
-    },
-    checkList (listId) {
-      if (this.checkedLists.includes(listId)) {
-        this.checkedLists = this.checkedLists.filter(id => id !== listId)
-      } else {
-        this.checkedLists.push(listId)
-      }
-      if (this.checkedLists.length) {
-        this.needShowControlPanel = true
-      } else {
-        this.needShowControlPanel = false
-      }
-      if (this.checkedLists.length === 1) {
-        this.needShowChangeName = true
-      } else {
-        this.needShowChangeName = false
-      }
     }
+  },
+  computed: {
+    ...mapState({
+      lists: state => state.specificationsLists.lists,
+      checkedLists: state => state.specificationsLists.checkedLists,
+      needShowControlPanel: state => state.specificationsLists.needShowControlPanel
+    })
   }
 }
 </script>
@@ -114,5 +83,18 @@ export default {
   height: 25px;
   color: teal;
   border: 2px solid teal;
+}
+.lists-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.lists-enter-active,
+.lists-leave-active {
+  transition: all 0.4s ease;
+}
+.lists-enter-from,
+.lists-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>
