@@ -1,49 +1,57 @@
 <template>
   <div class="wrapper">
-    <table class="evaluation-table" v-for="list in lists" :key="list.id">
+    <select @change="(e) => setSelectedList(Number(e.target.value))">
+      <option
+        v-for="list in lists"
+        :key="list.id"
+        :value="list.id"
+      >
+        {{ list.name }}
+      </option>
+    </select>
+    <table class="evaluation-table">
       <tr>
-        <th class="evaluation-table__list-title">{{ list.name }}</th>
+        <th class="evaluation-table__list-title">{{ getListBySelected.name }}</th>
       </tr>
       <tr>
         <td>Требование</td>
         <td>Результаты проверки</td>
         <td>Комментарий</td>
       </tr>
-      <tr v-for="specification in list.specifications" :key="specification.id">
-        <td>
-          {{ specification.title }}</td>
-        <td>
-          <select>
-            <option value="success">Выполнено</option>
-            <option value="needsRefinement">Требует доработки</option>
-            <option value="fail">Не выполнено</option>
-          </select>
-        </td>
-        <td><textarea v-model="comment" @input="resize($event)"></textarea></td>
-      </tr>
+      <evaluation-row
+        v-for="specification in getListBySelected.specifications"
+        :key="specification.id"
+        :specification="specification"
+      />
     </table>
+    <button @click="saveList">Сохранить список</button>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
+import { mapMutations, mapState, mapGetters, mapActions } from 'vuex'
+import EvaluationRow from '@/components/EvaluationRow'
 export default {
   name: 'EvaluationList',
-  data () {
-    return {
-      comment: ''
-    }
-  },
+  components: { EvaluationRow },
   methods: {
-    resize (e) {
-      e.target.style.height = 'auto'
-      e.target.style.height = `${this.scrollHeight}px`
+    ...mapMutations({
+      setSelectedList: 'specificationsLists/setSelectedList'
+    }),
+    ...mapActions({
+      saveChangedList: 'specificationsLists/saveChangedList'
+    }),
+    saveList () {
+      this.saveChangedList()
     }
   },
   computed: {
     ...mapState({
-      lists: state => state.specificationsLists.lists
+      lists: state => state.specificationsLists.lists,
+      selectedList: state => state.specificationsLists.selectedList
+    }),
+    ...mapGetters({
+      getListBySelected: 'specificationsLists/getListBySelected'
     })
   }
 }
@@ -76,14 +84,6 @@ tr > th {
   border-top: 1px solid black;
   border-right: 1px solid black;
 }
-td {
-  min-height: 25px;
-  border-right: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-self: center;
-}
 select {
   min-height: 20px;
   display: grid;
@@ -91,21 +91,5 @@ select {
   padding: 0.25em 0.2em 0.25em 0.2em;
   margin: 0;
   border-radius: 4px;
-}
-textarea {
-  padding: 5px 10px;
-  border: none;
-  width: 100%;
-  min-height: 20px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  resize:none;
-  overflow: hidden;
-  outline: none;
-  box-shadow: none;
-}
-textarea:focus textarea:active {
-  border: none;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div class="controls">
     <button class="control-btn">Оценка текущих требований</button>
-    <button class="control-btn" v-if="needShowChangeName">Изменить название</button>
     <button class="control-btn" @click="removeLists">Удалить</button>
   </div>
 </template>
@@ -14,11 +13,6 @@ export default {
   methods: {
     ...mapActions({
       removeLists: 'specificationsLists/removeLists'
-    })
-  },
-  computed: {
-    ...mapState({
-      needShowChangeName: state => state.specificationsLists.needShowChangeName
     })
   }
 }
