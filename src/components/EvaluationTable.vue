@@ -26,13 +26,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'EvaluationList',
-  props: {
-    lists: {
-      type: Array
-    }
-  },
   data () {
     return {
       comment: ''
@@ -43,6 +40,11 @@ export default {
       e.target.style.height = 'auto'
       e.target.style.height = `${this.scrollHeight}px`
     }
+  },
+  computed: {
+    ...mapState({
+      lists: state => state.specificationsLists.lists
+    })
   }
 }
 </script>
