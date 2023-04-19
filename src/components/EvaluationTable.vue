@@ -22,6 +22,7 @@
         v-for="specification in getListBySelected.specifications"
         :key="specification.id"
         :specification="specification"
+        :listId = "getListBySelected.id"
       />
     </table>
     <button @click="saveList">Сохранить список</button>
@@ -42,7 +43,7 @@ export default {
       saveChangedList: 'specificationsLists/saveChangedList'
     }),
     saveList () {
-      this.saveChangedList()
+      this.saveChangedList(this.getListBySelected)
     }
   },
   computed: {
@@ -79,10 +80,20 @@ tr {
   border-right: none;
 }
 tr > th {
+  padding: 5px;
   grid-column-start: span 3;
   min-height: 30px;
   border-top: 1px solid black;
   border-right: 1px solid black;
+}
+td {
+  min-height: 25px;
+  padding: 5px;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-self: center;
 }
 select {
   min-height: 20px;

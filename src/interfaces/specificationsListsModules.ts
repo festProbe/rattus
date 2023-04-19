@@ -1,7 +1,7 @@
 export interface Specification {
   id: number;
   title: string;
-  done: boolean;
+  status: string;
   comment: string;
 }
 

@@ -27,6 +27,54 @@ export const specificationsListsModule: Module<SpecificationsListsState, any> = 
         isShowSpecificationForm: false
       }))
     },
+    setSpecificationComment (state, payload: {
+      listId: number;
+      specificationId: number;
+      comment: string;
+    }) {
+      const { listId, specificationId, comment } = payload
+      state.lists = state.lists.map((list) => {
+        if (list.id === listId) {
+          return {
+            ...list,
+            specifications: list.specifications.map((specification) => {
+              if (specification.id === specificationId) {
+                return {
+                  ...specification,
+                  comment
+                }
+              }
+              return specification
+            })
+          }
+        }
+        return list
+      })
+    },
+    setSpecificationStatus (state, payload: {
+      listId: number;
+      specificationId: number;
+      status: string;
+    }) {
+      const { listId, specificationId, status } = payload
+      state.lists = state.lists.map((list) => {
+        if (list.id === listId) {
+          return {
+            ...list,
+            specifications: list.specifications.map((specification) => {
+              if (specification.id === specificationId) {
+                return {
+                  ...specification,
+                  status
+                }
+              }
+              return specification
+            })
+          }
+        }
+        return list
+      })
+    },
     setSelectedList (state, listId: number) {
       state.selectedList = listId
     },
@@ -73,71 +121,19 @@ export const specificationsListsModule: Module<SpecificationsListsState, any> = 
   },
   actions: {
     async fetchLists ({ commit }) {
-      const lists = [
-        {
-          id: 10,
-          name: 'Список замечательных идей',
-          specifications: [
-            {
-              id: 101,
-              title: 'Идея №1, лучшая на свете',
-              done: true,
-              comment: 'НУУУУУУУУУУУ'
-            },
-            {
-              id: 102,
-              title: 'Идея №2, ну такая себе',
-              done: true,
-              comment: 'Во истину!'
-            },
-            {
-              id: 103,
-              title: 'Идея №3, Стрёмная идея кароч',
-              done: true,
-              comment: 'Параша полнейшая'
-            }
-          ]
-        },
-        {
-          id: 11,
-          name: 'Список стрёмных идей',
-          specifications: [
-            {
-              id: 111,
-              title: 'Идея №1, стрёмная шо ппц',
-              done: true,
-              comment: 'НУУУУУУУУУУУ'
-            },
-            {
-              id: 112,
-              title: 'Идея №2, ну такая себе',
-              done: true,
-              comment: 'Во истину!'
-            },
-            {
-              id: 113,
-              title: 'Идея №3, Стрёмная идея кароч',
-              done: true,
-              comment: 'Параша полнейшая'
-            }
-          ]
-        }
-      ]
-      commit('setLists', lists)
-      commit('setShowSpecificationForm')
-      commit('setSelectedList', lists[0].id)
-      // try {
-      //   const response = await axios.get<any, AxiosResponse<SpecificationsList[]>, AxiosRequestConfig>(`${BASE_URL}lists`, {
-      //     headers: {
-      //       'Access-Control-Allow-Origin': '*'
-      //     }
-      //   })
-      //   console.log(response)
-      //   const lists = response.data
-      //   commit('setLists', lists)
-      // } catch (e) {
-      //   console.log(e)
-      // }
+      try {
+        const response = await axios.get<any, AxiosResponse<SpecificationsList[]>, AxiosRequestConfig>(`${BASE_URL}lists`, {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+        const lists = response.data
+        commit('setLists', lists)
+        commit('setShowSpecificationForm')
+        commit('setSelectedList', lists[0].id)
+      } catch (e) {
+        console.log(e)
+      }
     },
     async fetchAndCreateNewList ({
       dispatch
