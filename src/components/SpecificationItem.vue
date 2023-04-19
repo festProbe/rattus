@@ -9,7 +9,6 @@
     <input
       v-else
       v-focus
-      @blur="() => (this.isShowEditInput = false)"
       @keydown="handleChangeElementOnKey"
       class="new-specification"
       v-model="updatedSpecification"

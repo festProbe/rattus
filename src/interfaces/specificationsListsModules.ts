@@ -9,11 +9,13 @@ export interface SpecificationsList {
   id: number;
   name: string;
   specifications: Specification[];
+  isShowSpecificationForm?: boolean;
 }
 
 export interface SpecificationsListsState {
-  lists: SpecificationsList[],
-  checkedLists: number[],
-  needShowChangeName: boolean,
-  needShowControlPanel: boolean
+  lists: SpecificationsList[];
+  checkedLists: number[];
+  needShowControlPanel: boolean;
+  isShowListForm: boolean;
+  selectedList: number;
 }

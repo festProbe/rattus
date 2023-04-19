@@ -2,14 +2,20 @@
   <form @submit.prevent>
     <div>
       <span>Введите название списка</span>
-      <input ref="refListName" v-model="name" type="text"/>
+      <input
+        v-focus
+        @blur="hideListForm"
+        ref="refListName"
+        v-model="name"
+        type="text"
+      />
       <button @click="createList">Добавить</button>
     </div>
   </form>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -18,6 +24,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      hideListForm: 'specificationsLists/hideListForm'
+    }),
     ...mapActions({
       fetchAndCreateNewList: 'specificationsLists/fetchAndCreateNewList'
     }),

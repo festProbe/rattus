@@ -3,7 +3,6 @@
     <specifications-lists-control-panel
       class="controls"
       v-if="needShowControlPanel"
-      :needShowChangeName="needShowChangeName"
     />
     <div class="specifications-main">
       <transition-group name="lists">
@@ -11,19 +10,16 @@
           v-for="list in lists"
           :key="list.id"
           :list="list"
-          @checkList="checkList"
         />
       </transition-group>
       <specifications-list-form
-        v-if="isShowSpecificationForm"
-        :needFocus="needFocus"
-        @hideAddListFrom="hideAddListFrom"
+        v-if="isShowListForm"
       />
       <font-awesome-icon
         class="add-list-icon"
-        v-if="!isShowSpecificationForm"
+        v-else
         :icon="['fas', 'plus']"
-        @click="showCreateListForm"
+        @click="showListForm"
       />
     </div>
   </div>
@@ -33,30 +29,21 @@
 import SpecificationsList from './SpecificationsList'
 import SpecificationsListForm from './SpecificationsListForm.vue'
 import SpecificationsListsControlPanel from './SpecificationsListsControlPanel'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'SpecificationsLists',
   components: { SpecificationsListsControlPanel, SpecificationsList, SpecificationsListForm },
-  data () {
-    return {
-      isShowSpecificationForm: false,
-
-      checkedLists: []
-    }
-  },
   methods: {
-    showCreateListForm () {
-      this.isShowSpecificationForm = !this.isShowSpecificationForm
-    },
-    hideAddListFrom () {
-      this.isShowSpecificationForm = !this.isShowSpecificationForm
-    }
+    ...mapMutations({
+      showListForm: 'specificationsLists/showListForm'
+    })
   },
   computed: {
     ...mapState({
       lists: state => state.specificationsLists.lists,
       checkedLists: state => state.specificationsLists.checkedLists,
-      needShowControlPanel: state => state.specificationsLists.needShowControlPanel
+      needShowControlPanel: state => state.specificationsLists.needShowControlPanel,
+      isShowListForm: state => state.specificationsLists.isShowListForm
     })
   }
 }

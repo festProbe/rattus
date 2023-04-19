@@ -4,8 +4,16 @@
 >
   <div class="list-title">
     <div class="list-name">
-      <h3>{{list.name}}</h3>
-<!--      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.title" type="text" placeholder="specification">-->
+      <h3 v-if="!isNameEditing">{{list.name}}</h3>
+      <input
+        v-else
+        v-focus
+        @keydown="editNameOnKeydown"
+        @blur="() => (this.isNameEditing = false)"
+        class="edit-list-name"
+        v-model="editedName"
+        type="text"
+      >
     </div>
     <button
       class="btn"
@@ -27,23 +35,18 @@
       :key="specification.id"
       :propSpecification="specification"
       :listId="list.id"
-      @editSpecification="editSpecification"
-      @remove="removeSpecification"
     />
   </transition-group>
   <specification-form
     class="specification-form"
-    v-if="this.isShowSpecificationForm"
+    v-if="list.isShowSpecificationForm"
     :listId="list.id"
-    :needFocus="needFocus"
-    @hideAddSpecification="hideAddSpecification"
-    @create="createSpecification"
   />
   <font-awesome-icon
     class="add-icon"
-    v-if="!this.isShowSpecificationForm"
+    v-else
     :icon="['fas', 'plus']"
-    @click="showAddSpecification"
+    @click="() => this.showSpecificationForm(list.id)"
   />
 </div>
 </template>
@@ -51,7 +54,7 @@
 <script>
 import SpecificationForm from './SpecificationForm'
 import SpecificationItem from './SpecificationItem'
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name: 'SpecificationsList',
   components: { SpecificationForm, SpecificationItem },
@@ -62,36 +65,33 @@ export default {
   },
   data () {
     return {
-      isShowSpecificationForm: false,
-      needFocus: false
+      editedName: '',
+      isNameEditing: false
     }
   },
   methods: {
     ...mapMutations({
       pushToCheckedLists: 'specificationsLists/pushToCheckedLists',
-      removeFromCheckedLists: 'specificationsLists/removeFromCheckedLists'
+      removeFromCheckedLists: 'specificationsLists/removeFromCheckedLists',
+      showSpecificationForm: 'specificationsLists/showSpecificationForm',
+      hideSpecificationForm: 'specificationsLists/hideSpecificationForm'
     }),
-    createSpecification (listId, specification) {
-      this.$emit('create', listId, specification)
-    },
-    removeSpecification (listId, specification) {
-      this.$emit('remove', listId, specification)
-    },
-    editSpecification (listId, specification) {
-      this.$emit('editSpecification', listId, specification)
-    },
-    showAddSpecification () {
-      this.isShowSpecificationForm = !this.isShowSpecificationForm
-      document.addEventListener('keydown', this.handleHideAddSpecification)
-    },
-    hideAddSpecification () {
-      this.isShowSpecificationForm = !this.isShowSpecificationForm
-      document.removeEventListener('keydown', this.handleHideAddSpecification)
-    },
-    handleHideAddSpecification (event) {
-      if (event.key === 'Esc' || event.key === 'Escape') {
-        this.hideAddSpecification()
+    ...mapActions({
+      editListName: 'specificationsLists/changeListName'
+    }),
+    editNameOnKeydown (e) {
+      if (e.key === 'Enter') {
+        this.editListName({
+          listId: this.list.id,
+          name: this.editedName
+        })
+        this.editedName = ''
+        this.isNameEditing = false
       }
+    },
+    showEditForm () {
+      this.isNameEditing = true
+      this.editedName = this.list.name
     },
     checkList (e) {
       console.log(e)
@@ -100,7 +100,6 @@ export default {
       } else {
         this.removeFromCheckedLists(this.list.id)
       }
-      this.$emit('checkList', this.list.id)
     }
   }
 }

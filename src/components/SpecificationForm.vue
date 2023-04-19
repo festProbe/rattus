@@ -1,20 +1,28 @@
 <template>
   <form @submit.prevent>
     <div class="new-specification-form">
-      <input @keydown="createSpecificationOnEnter" class="new-specification-text" v-model="specification.title" type="text" placeholder="specification">
+      <input
+        v-focus
+        @keydown="createSpecificationOnEnter"
+        class="new-specification-text"
+        v-model="specification.title"
+        type="text"
+        placeholder="specification"
+        @blur="() => this.hideSpecificationForm(listId)"
+      >
       <font-awesome-icon class="btn" @click="createSpecification" :icon="['fas', 'plus']" />
     </div>
   </form>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'SpecificationForm.vue',
   props: {
     listId: {
-      type: String
+      type: Number
     }
   },
   data () {
@@ -27,6 +35,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      hideSpecificationForm: 'specificationsLists/hideSpecificationForm'
+    }),
     ...mapActions({
       addNewSpecification: 'specificationsLists/addNewSpecification'
     }),
@@ -37,10 +48,9 @@ export default {
           specification: this.specification
         })
         this.specification = {
-          text: ''
+          title: ''
         }
       }
-      this.$emit('hideAddSpecification')
     },
     createSpecificationOnEnter (event) {
       if (event.key === 'Enter') {
